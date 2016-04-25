@@ -1,5 +1,5 @@
 Getting started with Apache Tomcat 8.0.x in IntelliJ Ultimate Edition 2016.1
-======================================================================
+============================================================================
 
 This guide provides a step-by-step introduction for how to set-up your
 own local instance of a Tomcat server using IntelliJ Ultimate Edition
@@ -72,34 +72,34 @@ ps xu | grep tomcat | grep -v grep | awk '{ print $2 }' | xargs kill -9
 
 Start by creating a new project in IntelliJ,
 
-![](img/0-create-a-new-project.png)
+![](0-create-a-new-project.png)
 
 When creating the project it is important to create a Spring Project
 that is a web application using a custom application server.
 
-![](img/1-spring-application-server.png)
+![](1-spring-application-server.png)
 
 We click the "New..." button and then select the "Tomcat Server" option
 
-![](img/2-select-application-server.png)
+![](2-select-application-server.png)
 
 If you've followed the instructions _as is_ up to this point you can
 input the path shown in the following image, otherwise specify the
 absolute path to your Tomcat Home directory.
 
-![](img/3-selecting-the-tomcat-home.png)
+![](3-selecting-the-tomcat-home.png)
 
 We proceed by choosing our Project name and location. You may choose
 any setting here and whenever you see "TomcatExample" in the
 subsequent steps simply change it to reflect your chosen project name.
 
-![](img/4-project-name-and-destination.png)
+![](4-project-name-and-destination.png)
 
 IntelliJ generates some project boiler plate. If you cannot see the project
 browser immediately (i.e. the directory tree) simply click the TomcatExample
 button which is far up to your left (look at the top of the below image)
 
-![](img/5-project-boilerplate.png)
+![](5-project-boilerplate.png)
 
 You can now run your Tomcat application straight out of the box by
 finding the "Run" menu at the top of your IntelliJ window or using the shortcut `Shift+F10`. Input
@@ -135,7 +135,7 @@ Start by creating a package in your `src` directory. This is
 _required_ as servlets have to be kept in a named package for
 deployment, instead of the default "no-name" package.
 
-First we write a naive, unflexible and illegible servlet (we will
+First we write a naive, inflexible and illegible servlet (we will
 decouple the HTML from the servlet soon),
 
 ```java
