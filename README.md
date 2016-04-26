@@ -18,6 +18,11 @@ value. Lastly we will accept user-input through standard HTML input
 fields which is sent to us through the `HTTP POST` request method
 and echo it back to the end-user.
 
+For reference you will find the source code created at the end of the
+project in the
+[TomcatExample](https://github.com/student-capture/tomcat-example/tree/master/TomcatExample)
+directory.
+
 **Note:** This guide makes heavy use of images, and you may have a
 different theme set for your IntelliJ installation. If you like this
 color scheme it is called Dracula and is available by default.
