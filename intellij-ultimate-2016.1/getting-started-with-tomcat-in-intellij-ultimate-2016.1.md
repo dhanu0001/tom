@@ -195,7 +195,7 @@ We insert the following inside the `<web-app>` scope,
 </servlet>
 <servlet-mapping>
     <servlet-name>TomcatHelloWorldExample</servlet-name>
-    <url-pattern>/hello_example</url-pattern>
+    <url-pattern>/tomcat_example</url-pattern>
 </servlet-mapping>
 ```
 
@@ -205,15 +205,15 @@ elements.
 The element `<servlet>` connects a Java Servlet class
 (`example.MyHttpServlet`) to the servlet named
 `MyHttpServlet`. Then the element `<servlet-mapping>` maps the servlet
-`MyHttpServlet` to the URL pattern `/hello_example`. 
+`MyHttpServlet` to the URL pattern `/tomcat_example`. 
 
 Combined together, the two elements essentially say that requests to
-this web application at the URL `/hello_example` should be handled by the class
+this web application at the URL `/tomcat_example` should be handled by the class
 `example.MyHttpServlet`. 
 
 Now we re-run our application (close it and start it again, or `Ctrl+F5) and
 navigate to
-[http://localhost:8080/hello_example](http://localhost:8080/hello_example).
+[http://localhost:8080/tomcat_example](http://localhost:8080/tomcat_example).
 
 Notice the extension after the port specifier. It is the
 same as the `url-pattern` we defined in the `servlet-mapping` closure,
@@ -298,11 +298,11 @@ object.
 ```
 
 Re-run your Tomcat application and visit
-[http://localhost:8080/hello_example/?bar=42](http://localhost:8080/hello_example/?bar=42)
+[http://localhost:8080/tomcat_example/?bar=42](http://localhost:8080/tomcat_example/?bar=42)
 and observe how your page renders "42".
 
 If you instead visit
-[http://localhost:8080/hello_example/](http://localhost:8080/hello_example/)
+[http://localhost:8080/tomcat_example/](http://localhost:8080/tomcat_example/)
 you get "null" as there is no value set for the parameter.
 
 ## Accepting additional URI information
@@ -320,10 +320,10 @@ request.getRequestDispatcher("/index.jsp").include(request, response);
 ```
 
 We then proceed by updating the `<url-pattern>` inside the `web.xml`
-file to `<url-pattern>/hello_example/*</url-pattern>`. The `*` is a
+file to `<url-pattern>/tomcat_example/*</url-pattern>`. The `*` is a
 wildcard character so we will accept any text after the
-`/hello_example` servlet specifier.  That is, it matches all sub-paths
-under `/hello_example`.
+`/tomcat_example` servlet specifier.  That is, it matches all sub-paths
+under `/tomcat_example`.
 
 Notice that we did not have to do this to accept query parameters in
 the earlier step
@@ -387,13 +387,13 @@ and call the method on the relevant string
     <h1 style="font-size: 4em;"><%= request.getParameter("bar") %></h1>
 
     <!-- The sanitize method is called on the line below -->
-    <h1 style="font-size: 4em;"><%= HtmlSanitizer.sanitize(request.getRequestURI()) %></h1>  
+    <h1 style="font-size: 4em;"><%= HtmlSanitizer.sanitize(request.getRequestURI()) %></h1>
   </body>
 </html>
 ```
 
 and re-run your application, this time visit
-[http://localhost:8080/hello_example/apa?bar=2](http://localhost:8080/hello_example/apa?bar=2)
+[http://localhost:8080/tomcat_example/apa?bar=2](http://localhost:8080/tomcat_example/apa?bar=2)
 
 Your page should now look like this:
 
@@ -444,19 +444,23 @@ And update your `index.jsp` to:
 ```
 
 You can now visit [localhost:8080/](localhost:8080/) or
-[localhost:8080/hello_example/some-stuff?bar=other-stuff](localhost:8080/hello_example/some-stuff?bar=other-stuff)
+[localhost:8080/tomcat_example/apa/some-stuff?bar=other-stuff](localhost:8080/tomcat_example/some-stuff?bar=other-stuff)
 and enter values into the form, post the data through the send button
 and watch the page update.
 
 The following two figures shows the page
-[localhost:8080/hello_example/some-stuff?bar=other-stuff](localhost:8080/hello_example/some-stuff?bar=other-stuff)
-[before](localhost:8080/hello_example/some-stuff?bar=other-stuff) )
+[localhost:8080/tomcat_example/some-stuff?bar=other-stuff](localhost:8080/tomcat_example/some-stuff?bar=other-stuff)
+[before](localhost:8080/tomcat_example/some-stuff?bar=other-stuff) )
 and
-[after](http://localhost:8080/hello_example/some-stuff?firstname=Student+Capture&lastname=Is+the+bomb)
+[after](http://localhost:8080/tomcat_example/some-stuff?firstname=Monorail&lastname=Cat)
 the form has been posted.
 
 [[img/7-before-send.png]]
 
 [[img/8-after-send.png]]
 
+# Closing statements
 
+This concludes the guide, remember that this is just to get you
+started with Tomcat. Next on your agenda is using React.js+Ajax+JSON as
+opposed to JSP files to serve dynamic content.
