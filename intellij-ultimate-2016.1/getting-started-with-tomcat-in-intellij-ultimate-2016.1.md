@@ -81,7 +81,8 @@ Start by creating a new project in IntelliJ,
 [[img/0-create-a-new-project.png]]
 
 When creating the project it is important to create a Spring Project
-that is a web application using a custom application server.
+(we won't actually use any Spring features) that is a web application
+using a custom application server.
 
 [[img/1-spring-application-server.png]]
 
@@ -136,6 +137,27 @@ In this section we will create our own servlet to replace the default
 servlet provided by Tomcat. Essentially this boils down to extending
 the proper classes and configuring our web application through its
 configuration files.
+
+First open your `index.jsp` file and add the line
+
+```
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+```
+
+to the top of the file.
+
+Then follow these instructions,
+
+1. Click your Project name at the top of the project toolbar and press
+   "F4" to bring up the module settings dialog.
+2. Then go to the "Dependencies" tab in the "Modules" section.
+3. Click the green "+" icon --> library --> From Maven.
+4. Search for `javax.servlet:jstl:1.2` in the search bar and press OK
+   and it will download and add the above mentioned library as a
+   module.
+
+This provides us access to the latest JSP language, EL.
+
 
 Start by creating a package in your `src` directory. This is
 _required_ as servlets have to be kept in a named package for
@@ -210,11 +232,6 @@ Combined together, the two elements essentially say that requests to
 this web application at the URL `/hello_example` should be handled by the class
 `example.MyHttpServlet`. 
 
-In a WAR file, all Java class files are placed in the WEB-INF/classes/
-directory, so Tomcat will search for
-WEB-INF/classes/edu/ucla/cs/cs144/ConfigurationTest.class in the WAR
-file.
-
 Now we re-run our application (close it and start it again, or `Ctrl+F5) and
 navigate to
 [http://localhost:8080/hello_example](http://localhost:8080/hello_example).
@@ -224,7 +241,7 @@ same as the `url-pattern` we defined in the `servlet-mapping` closure,
 hence we are sending a request to the web application which is then
 handled by the `MyHttpServlet`.
 
-## Decoupling HTML and Java using WAR files
+## Decoupling HTML and Java
 
 We want to separate the behaviour of our servlet, which should tend to
 business logic, which in the context of this application means retrieving the
@@ -404,4 +421,6 @@ Your page should now look like this:
 [[img/5-rendered-page.png]]
 
 # Accepting HTTP POST requests
+
+We end this guide by accepting user input provided on the web-page.
 
