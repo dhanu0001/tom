@@ -85,11 +85,10 @@ Start by creating a new project in IntelliJ,
 
 ![](img/0-create-a-new-project.png)
 
-When creating the project it is important to create a Spring Project
-(we won't actually use any Spring features) that is a web application
-using a custom application server.
+When creating the project it is important that we create a web
+application using a custom application server.
 
-![](img/1-spring-application-server.png?raw=true)
+![](img/1-application-server.png?raw=true)
 
 We click the "New..." button and then select the "Tomcat Server" option
 
