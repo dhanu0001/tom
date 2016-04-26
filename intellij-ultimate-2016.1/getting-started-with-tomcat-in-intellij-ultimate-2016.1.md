@@ -22,6 +22,12 @@ and echo it back to the end-user.
 different theme set for your IntelliJ installation. If you like this
 color scheme it is called Dracula and is available by default.
 
+**Note:** In production you should sanitize HTML and user-input using
+a third-party library such as the
+[OWASP Java HTML sanitizer](https://www.owasp.org/index.php/OWASP_Java_HTML_Sanitizer_Project).
+We will skip this pre-requisite and roll our own sanitizer in this guide
+to save you the up-front time investment.
+
 # Prerequisites
 
 ## IntelliJ 2016.1 Ultimate Edition
@@ -159,7 +165,7 @@ public class MyHttpServlet extends HttpServlet {
             out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
             out.println("<title>TomcatExample</title></head>");
             out.println("<body>");
-            out.println("<h1>Hello, World!</h1>");
+            out.println("<h1 style="font-size: 4em;">Hello, World!</h1>");
             out.println("</body></html>");
         }
     }
@@ -234,13 +240,13 @@ We do this by imbuing the `HttpServletRequest` object with relevant
 data before deferring the request to a JSP page, which is essentially
 a HTML document with template capabilities.
 
-Begin by modifying the `doGet` method inside the `MyHttpServlet` class,
+Begin by overriding the `doGet` method inside the `MyHttpServlet` class,
 
 ```
+@Override
 protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String pageTitle = "TomcatExample";
-        request.setAttribute("title", pageTitle);
+        request.setAttribute("title", "TomcatExample");
         request.setAttribute("foo", "Sterm trepers!");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
 }
@@ -261,7 +267,7 @@ we have updated to contain:
     <title><%= request.getAttribute("title") %></title>
   </head>
   <body>
-  <h1>Ermahgerd, <%= request.getAttribute("foo") %></h1>
+  <h1 style="font-size: 4em;">Ermahgerd, <%= request.getAttribute("foo") %></h1>
   </body>
 </html>
 ```
@@ -274,4 +280,128 @@ Tomcat image.
 
 # Accepting query parameters in the web-browser address bar
 
+We will now proceed to accept a query parameter in the URL address
+bar, specifically `?bar=`. 
+
+We then update our `index.jsp` by discarding the image (its just noise
+at this point) and call the `getParameter` method on the `request`
+object.
+
+```
+<%-- index.jsp --%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+  <head>
+    <title><%= request.getAttribute("title") %></title>
+  </head>
+  <body>
+  <h1 style="font-size: 4em;">Ermahgerd, <%= request.getAttribute("foo") %></h1>
+  <h1 style="font-size: 4em;"><%= request.getParameter("bar") %></h1>
+  </body>
+</html>
+```
+
+Re-run your Tomcat application and visit
+[http://localhost:8080/hello_example/?bar=42](http://localhost:8080/hello_example/?bar=42)
+and observe how your page renders "42".
+
+If you instead visit
+[http://localhost:8080/hello_example/](http://localhost:8080/hello_example/)
+you get "null" as there is no value set for the parameter.
+
+## Accepting additional URI information
+
+In this next section we will update our application to accept
+additional URI information. This is important when accessing specific
+resources and it will also allow us to showcase how to import Java
+methods into our JSP file.
+
+In the `doGet` method of the servlet replace the call to the `forward` method with
+the `include` method,
+
+```
+request.getRequestDispatcher("/index.jsp").include(request, response);
+```
+
+We then proceed by updating the `<url-pattern>` inside the `web.xml`
+file to `<url-pattern>/hello_example/*</url-pattern>`. The `*` is a
+wildcard character so we will accept any text after the
+`/hello_example` servlet specifier.  That is, it matches all sub-paths
+under `/hello_example`.
+
+Notice that we did not have to do this to accept query parameters in
+the earlier step.
+
+In this step we will want to sanitize the user-input. As stated
+earlier you should use a third-party library for doing this but we
+will hand-roll our own to be brief.
+
+Create the following class (disregard the implementation is not
+important):
+
+```java
+// You can create the class in any package.
+// It does not have to be inside the same package
+// as the servlet.
+package example;
+
+public class HtmlSanitizer {
+    public static String sanitize(String unsafeString) {
+        if (unsafeString == null) return null;
+        int len = unsafeString.length();
+        StringBuilder result = new StringBuilder(len + 20);
+        char aChar;
+
+        for (int i = 0; i < len; ++i) {
+            aChar = unsafeString.charAt(i);
+            switch (aChar) {
+                case '<': result.append("&lt;"); break;
+                case '>': result.append("&gt;"); break;
+                case '&': result.append("&amp;"); break;
+                case '"': result.append("&quot;"); break;
+                default:  result.append(aChar);
+            }
+        }
+
+        return (result.toString());
+    }
+}
+```
+
+To access the `sanitize` method inside our JSP document
+we update `index.jsp` with an import statement,
+
+```
+<%@ page import="example.HtmlSanitizer" %>
+```
+
+and call the method on the relevant string
+
+```
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="example.HtmlSanitizer" %>
+
+
+<html>
+  <head>
+    <title><%= request.getAttribute("title") %></title>
+  </head>
+  <body>
+    <h1 style="font-size: 4em;">Ermahgerd, <%= request.getAttribute("foo") %></h1>
+    <h1 style="font-size: 4em;"><%= request.getParameter("bar") %></h1>
+
+    <!-- The sanitize method is called on the line below -->
+    <h1 style="font-size: 4em;"><%= HtmlSanitizer.sanitize(request.getRequestURI()) %></h1>  
+  </body>
+</html>
+```
+
+and re-run your application, this time visit
+[http://localhost:8080/hello_example/apa?bar=2](http://localhost:8080/hello_example/apa?bar=2)
+
+Your page should now look like this:
+
+[[img/5-rendered-page.png]]
+
 # Accepting HTTP POST requests
+
