@@ -78,35 +78,35 @@ ps xu | grep tomcat | grep -v grep | awk '{ print $2 }' | xargs kill -9
 
 Start by creating a new project in IntelliJ,
 
-![](img/0-create-a-new-project.png]]
+![](img/0-create-a-new-project.png)
 
 When creating the project it is important to create a Spring Project
 (we won't actually use any Spring features) that is a web application
 using a custom application server.
 
-![](img/1-spring-application-server.png?raw=true]]
+![](img/1-spring-application-server.png?raw=true)
 
 We click the "New..." button and then select the "Tomcat Server" option
 
-![](img/2-select-application-server.png?raw=true]]
+![](img/2-select-application-server.png?raw=true)
 
 If you've followed the instructions _as is_ up to this point you can
 input the path shown in the following image, otherwise specify the
 absolute path to your Tomcat Home directory.
 
-![](img/3-selecting-the-tomcat-home.png?raw=true]]
+![](img/3-selecting-the-tomcat-home.png?raw=true)
 
 We proceed by choosing our Project name and location. You may choose
 any setting here and whenever you see "TomcatExample" in the
 subsequent steps simply change it to reflect your chosen project name.
 
-![](img/4-project-name-and-destination.png?raw=true]]
+![](img/4-project-name-and-destination.png?raw=true)
 
 IntelliJ generates some project boiler plate. If you cannot see the project
 browser immediately (i.e. the directory tree) simply click the TomcatExample
 button which is far up to your left (look at the top of the below image)
 
-![](img/5-project-boilerplate.png?raw=true]]
+![](img/5-project-boilerplate.png?raw=true)
 
 You can now run your Tomcat application straight out of the box by
 finding the "Run" menu at the top of your IntelliJ window or using the shortcut `Shift+F10`. Input
