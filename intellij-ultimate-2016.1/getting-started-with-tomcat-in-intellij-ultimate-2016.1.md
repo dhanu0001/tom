@@ -138,27 +138,6 @@ servlet provided by Tomcat. Essentially this boils down to extending
 the proper classes and configuring our web application through its
 configuration files.
 
-First open your `index.jsp` file and add the line
-
-```
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-```
-
-to the top of the file.
-
-Then follow these instructions,
-
-1. Click your Project name at the top of the project toolbar and press
-   "F4" to bring up the module settings dialog.
-2. Then go to the "Dependencies" tab in the "Modules" section.
-3. Click the green "+" icon --> library --> From Maven.
-4. Search for `javax.servlet:jstl:1.2` in the search bar and press OK
-   and it will download and add the above mentioned library as a
-   module.
-
-This provides us access to the latest JSP language, EL.
-
-
 Start by creating a package in your `src` directory. This is
 _required_ as servlets have to be kept in a named package for
 deployment, instead of the default "no-name" package.
@@ -347,8 +326,8 @@ wildcard character so we will accept any text after the
 under `/hello_example`.
 
 Notice that we did not have to do this to accept query parameters in
-the earlier step.
-
+the earlier step
+.
 In this step we will want to sanitize the user-input. As stated
 earlier you should use a third-party library for doing this but we
 will hand-roll our own to be brief.
@@ -418,9 +397,66 @@ and re-run your application, this time visit
 
 Your page should now look like this:
 
-[[img/5-rendered-page.png]]
+[[img/6-rendered-page.png]]
 
 # Accepting HTTP POST requests
 
 We end this guide by accepting user input provided on the web-page.
+
+We add an additional method in our servlet that does the exact same
+thing as the `doPost` method.
+
+```java
+@Override
+public void doPost(HttpServletRequest request, HttpServletResponse response)
+                   throws IOException, ServletException {
+    doGet(request, response);
+}
+```
+
+And update your `index.jsp` to:
+
+```
+<%-- index.jsp --%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="example.HtmlSanitizer" %>
+
+<html>
+  <head>
+    <title><%= request.getAttribute("title") %></title>
+  </head>
+  <body>
+  <h1 style="font-size: 4em;">Ermahgerd, <%= request.getAttribute("foo") %></h1>
+  <h1 style="font-size: 4em;"><%= request.getParameter("bar") %></h1>
+  <h1 style="font-size: 4em;"><%= HtmlSanitizer.sanitize(request.getRequestURI()) %></h1>
+
+  <form method='get'>
+    Firstname: <input type='text' name='firstname'><br />
+    Lastname: <input type='text' name='lastname'><br />
+  <input type='submit' value='SEND'>
+  </form>
+
+  <h1 style="font-size: 4em;">Firstname: <%= HtmlSanitizer.sanitize(request.getParameter("firstname")) %></h1>
+  <h1 style="font-size: 4em;">Lastname: <%= HtmlSanitizer.sanitize(request.getParameter("lastname")) %></h1>
+  
+  </body>
+</html>
+```
+
+You can now visit [localhost:8080/](localhost:8080/) or
+[localhost:8080/hello_example/some-stuff?bar=other-stuff](localhost:8080/hello_example/some-stuff?bar=other-stuff)
+and enter values into the form, post the data through the send button
+and watch the page update.
+
+The following two figures shows the page
+[localhost:8080/hello_example/some-stuff?bar=other-stuff](localhost:8080/hello_example/some-stuff?bar=other-stuff)
+[before](localhost:8080/hello_example/some-stuff?bar=other-stuff) )
+and
+[after](http://localhost:8080/hello_example/some-stuff?firstname=Student+Capture&lastname=Is+the+bomb)
+the form has been posted.
+
+[[img/7-before-send.png]]
+
+[[img/8-after-send.png]]
+
 
