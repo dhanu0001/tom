@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="TomcatExample:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="MvnWebapp.war">
+      <element id="artifact" artifact-name="TomcatExample:war exploded" />
+    </root>
+  </artifact>
+</component>
