@@ -1,7 +1,12 @@
-Getting started with Apache Tomcat 8.0.x in IntelliJ Ultimate Edition 2016.1
-============================================================================
+Getting started with Apache Tomcat 8.0.x 
+========================================
 
-This guide provides a step-by-step introduction for how to set-up your
+The guide continues to give a step-by-step introduction to using Tomcat
+and changing its behaviour to suit your needs through the use of
+custom servlets. This information is IDE-agnostic. Note that
+the hotkeys are IntelliJ hotkeys.
+
+This guide begins by providing a step-by-step introduction for how to set-up your
 own local instance of a Tomcat server using IntelliJ Ultimate Edition
 2016.1 as your IDE.
 
@@ -10,11 +15,13 @@ parameters through the URL address bar (in other words an `HTTP GET`
 request) in your browser, i.e.  given the URL
 
 ```
-http://localhost:8080/?answer=42
+http://localhost:8080/banana?answer=42
 ```
 
 you will be able to retrieve the `answer` parameter and its
-value. Lastly we will accept user-input through standard HTML input
+value and getting access to the entire URI (including the banana text).
+
+Lastly we will accept user-input through standard HTML input
 fields which is sent to us through the `HTTP POST` request method
 and echo it back to the end-user.
 
