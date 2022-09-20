@@ -20,7 +20,7 @@ jobs:
           command: |
            mvn clean install
            curl -fL https://getcli.jfrog.io | sh
-           ./jfrog rt u "*/*.war" "maven/" --url="https://dhanu0001.jfrog.io/artifactory/maven/" --artifactory-url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --apikey $ARTIFACTORY_APIKEY
+          # ./jfrog rt u "*/*.war" "maven/" --url="https://dhanu0001.jfrog.io/artifactory/maven/" --artifactory-url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --apikey $ARTIFACTORY_APIKEY
            #echo "https://saks.jfrog.io/artifactory/cx-mvn-loc-poc-dev/:_authToken=$ARTIFACTORY_API_KEY" > ~/.cx-mvn-loc-poc-dev/
       - store_artifacts:
           path: /tmp/my-app-1.0-SNAPSHOT.jar     
