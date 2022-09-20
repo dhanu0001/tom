@@ -5,22 +5,28 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
+  upload-artifact:
+    # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
+    # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # Be sure to update the Docker image tag below to openjdk version of your application.
+    # A list of available CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/openjdk
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: cimg/openjdk:11.0
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+          name: pushing artifacts
+          command: |
+           mvn clean install
+           curl -fL https://getcli.jfrog.io | sh
+           ./jfrog rt u "*/*.war" "maven/" --url="https://dhanu0001.jfrog.io/artifactory/maven/" --artifactory-url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --apikey $ARTIFACTORY_APIKEY
+           #echo "https://saks.jfrog.io/artifactory/cx-mvn-loc-poc-dev/:_authToken=$ARTIFACTORY_API_KEY" > ~/.cx-mvn-loc-poc-dev/
+      - store_artifacts:
+          path: /tmp/my-app-1.0-SNAPSHOT.jar     
 workflows:
-  say-hello-workflow:
+  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - say-hello
+      - upload-artifact:
+           context: artifactory-poc
